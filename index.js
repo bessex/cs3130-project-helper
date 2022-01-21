@@ -40,6 +40,23 @@ client.on('interactionCreate', async interaction => {
 
 // TODO: schedule polls for each course here
 // cs3130
+// 
+// const cs3130_job = schedule.scheduleJob('40 13-15 * * 2,4', )
+
 // cs3500
+// const cs3500_job = schedule.scheduleJob('0 12-14 * * 2,4', )
+
 // cs3200
+// const cs3200_job = schedule.scheduleJob('25 11-13 * * 1,3', )
+
 // cs4400
+// const cs4400_job = schedule.scheduleJob('50 9-11 * * 1,3', )
+
+const scraper = require('./scrapers.js');
+
+// async function func() {
+// 	console.log(await scraper.getCovidText());
+// }
+
+// func();
+
