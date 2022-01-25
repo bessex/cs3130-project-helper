@@ -58,21 +58,32 @@ const opwCity = process.env.OPENWEATHER_CITY_ID;
 const { Weather } = require('./weather-tracker.js');
 const tracker = new Weather(opwToken, opwCity);
 
-// cs3130
-const cs3130_poll_job = schedule.scheduleJob('39 13-15 * * 2,4', () => tracker.poll());
-const cs3130_post_job = schedule.scheduleJob('40 15 * * 2,4', () => post(tracker, 'cs3130', client, channels));
+async function init_tracker(){
+	await tracker.poll();
+	await tracker.poll();
+	await tracker.poll();
+}
 
-// cs3500
-const cs3500_poll_job = schedule.scheduleJob('59 11-13 * * 2,4', () => tracker.poll());
-const cs3500_post_job = schedule.scheduleJob('0 14 * * 2,4', () => post(tracker, 'cs3500', client, channels));
+// we want at least three datapoints before we begin reporting--otherwise probably will crash with current implementation
+init_tracker().then(() => {
+	// cs3130
+	const cs3130_poll_job = schedule.scheduleJob('39 13-15 * * 2,4', () => tracker.poll());
+	const cs3130_post_job = schedule.scheduleJob('40 15 * * 2,4', () => post(tracker, 'cs3130', client, channels));
 
-// cs3200
-const cs3200_poll_job = schedule.scheduleJob('24 11-13 * * 1,3', () => tracker.poll());
-const cs3200_post_job = schedule.scheduleJob('25 13 * * 1,3', () => post(tracker, 'cs3200', client, channels));
+	// cs3500
+	const cs3500_poll_job = schedule.scheduleJob('59 11-13 * * 2,4', () => tracker.poll());
+	const cs3500_post_job = schedule.scheduleJob('0 14 * * 2,4', () => post(tracker, 'cs3500', client, channels));
 
-// cs4400
-const cs4400_poll_job = schedule.scheduleJob('49 9-11 * * 1,3', () => tracker.poll());
-const cs4400_post_job = schedule.scheduleJob('50 11 * * 1,3', () => post(tracker, 'cs4400', client, channels));
+	// cs3200
+	const cs3200_poll_job = schedule.scheduleJob('24 11-13 * * 1,3', () => tracker.poll());
+	const cs3200_post_job = schedule.scheduleJob('25 13 * * 1,3', () => post(tracker, 'cs3200', client, channels));
+
+	// cs4400
+	const cs4400_poll_job = schedule.scheduleJob('49 9-11 * * 1,3', () => tracker.poll());
+	const cs4400_post_job = schedule.scheduleJob('50 11 * * 1,3', () => post(tracker, 'cs4400', client, channels));
+})
+
+
 
 /**
  * 
