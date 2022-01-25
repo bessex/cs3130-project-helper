@@ -1,6 +1,8 @@
 const scraper = require('../scrapers.js');
 const { SlashCommandBuilder } = require('@discordjs/builders');
 
+const date = require('date-and-time');
+
 // make command available for discord.js
 module.exports = {
     data: new SlashCommandBuilder()
@@ -19,7 +21,7 @@ module.exports = {
  * @returns {String} COVID info message
  */
 async function getCovidText() {
-    const data = await scraper.covidData();
+    const data = await scraper.getCovidData();
 
     const daydate = date.format(new Date(data.dt), 'DD MMM YYYY, HH:mm');
 
