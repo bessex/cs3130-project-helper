@@ -33,7 +33,7 @@ async function getWeatherText(time) {
     const token = process.env.OPENWEATHER_TOKEN;
     const cityId = process.env.OPENWEATHER_CITY_ID;
 
-    data = await scraper.getWeatherData(token, cityId);
+    const data = await scraper.getWeatherData(token, cityId);
     
     // get current time and temp info
     const tm0 = data.dt;

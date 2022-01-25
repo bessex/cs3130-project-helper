@@ -9,7 +9,7 @@ class Weather {
     }
 
     async poll() {
-        w = await scraper.getWeatherData(this.token, this.cityId);
+        const w = await scraper.getWeatherData(this.token, this.cityId);
         this.data.push(w);
     }
 
@@ -26,25 +26,25 @@ class Weather {
     get(dt) {
         if (this.data.length < 3) return (null, null, null);
 
-        w0 = this.data[0];
-        w1 = this.data[0];
-        w2 = this.data[0];
+        var w0 = this.data[0];
+        var w1 = this.data[0];
+        var w2 = this.data[0];
 
-        dt0 = dt;
-        dt1 = dt - (1 * 60 * 60);
-        dt2 = dt - (2 * 60 * 60);
+        var dt0 = dt;
+        var dt1 = dt - (1 * 60 * 60);
+        var dt2 = dt - (2 * 60 * 60);
 
-        prunedt = dt - (24 * 60 * 60);
-        pruneIdx = 0;
+        const prunedt = dt - (24 * 60 * 60);
+        var pruneIdx = 0;
 
-        bestDelta0 = Math.abs(dt0 - w0.dt);
-        bestDelta1 = Math.abs(dt1 - w1.dt);
-        bestDelta2 = Math.abs(dt2 - w2.dt);
+        var bestDelta0 = Math.abs(dt0 - w0.dt);
+        var bestDelta1 = Math.abs(dt1 - w1.dt);
+        var bestDelta2 = Math.abs(dt2 - w2.dt);
 
-        this.data.forEach(w, i => {
-            currentDelta0 = Math.abs(dt0 - w.dt);
-            currentDelta1 = Math.abs(dt1 - w.dt);
-            currentDelta2 = Math.abs(dt2 - w.dt);
+        this.data.forEach((w, i) => {
+            const currentDelta0 = Math.abs(dt0 - w.dt);
+            const currentDelta1 = Math.abs(dt1 - w.dt);
+            const currentDelta2 = Math.abs(dt2 - w.dt);
 
             if (currentDelta0 < bestDelta0) w0 = w;
             if (currentDelta1 < bestDelta1) w1 = w;
@@ -55,7 +55,7 @@ class Weather {
 
         this.prune(pruneIdx);
 
-        return (w2, w1, w0);
+        return [w0, w1, w2];
     }
 
     prune(startIdx) {
