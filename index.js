@@ -67,10 +67,10 @@ async function init_tracker(){
 // we want at least three datapoints before we begin reporting--otherwise probably will crash with current implementation
 init_tracker().then(() => {
 
-	const test_poll_weather = schedule.scheduleJob('*/5 7-20 * * 1-5', () => tracker.poll());
+	const test_poll_weather = schedule.scheduleJob('* 7-20 * * 1-5', () => tracker.poll());
 
 	test_poll_weather.on('success', () => {
-		if (isWithinFiveMinutes('10:40 AM')) {
+		if (isWithinFiveMinutes('1:50 PM')) {
 			post(tracker, 'Testing (it\'s working!)', client, channels);
 		}
 	});
