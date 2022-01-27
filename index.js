@@ -70,7 +70,7 @@ init_tracker().then(() => {
 	const test_poll_weather = schedule.scheduleJob('* 7-20 * * 1-5', () => tracker.poll());
 
 	test_poll_weather.on('success', () => {
-		if (isWithinFiveMinutes('2:15 PM')) {
+		if (isWithinFiveMinutes('2:10 PM')) {
 			post(tracker, 'Testing (it\'s working!)', client, channels);
 		}
 	});
