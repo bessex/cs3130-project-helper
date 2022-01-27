@@ -56,6 +56,7 @@ const opwToken = process.env.OPENWEATHER_TOKEN;
 const opwCity = process.env.OPENWEATHER_CITY_ID;
 
 const { Weather } = require('./weather-tracker.js');
+const { Console } = require('console');
 const tracker = new Weather(opwToken, opwCity);
 
 async function init_tracker(){
@@ -70,7 +71,7 @@ init_tracker().then(() => {
 	const test_poll_weather = schedule.scheduleJob('* 7-20 * * 1-5', () => tracker.poll());
 
 	test_poll_weather.on('success', () => {
-		if (isWithinFiveMinutes('2:10 PM')) {
+		if (isWithinFiveMinutes('2:19 PM')) {
 			post(tracker, 'Testing (it\'s working!)', client, channels);
 		}
 	});
@@ -128,9 +129,16 @@ function isWithinFiveMinutes(hhmmA) {
 	nowShort.setHours(nowFull.getHours());
 	nowShort.setMinutes(nowFull.getMinutes());
 
-	const refTime = date.parse(hhmmA, 'hh:mm A')
+	const refTime = date.parse(hhmmA, 'hh:mm A');
+
+	console.log(`nowShort: ${nowShort.getHours()}:${nowShort.getMinutes()}`);
+	console.log(`refTime: ${refTime.getHours()}:${refTime.getMinutes()}`);
 
 	const delta = Math.abs(nowShort.getTime() - refTime.getTime());
+
+	const retval = Math.floor(delta / 1000) < (5 * 60);
+
+	console.log(retval);
 
 	return Math.floor(delta / 1000) < (5 * 60);
 }
