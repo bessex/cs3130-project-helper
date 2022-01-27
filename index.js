@@ -121,7 +121,7 @@ init_tracker().then(() => {
 })
 
 
-function isWithinFiveMins(hhmmA) {
+function isWithinFiveMinutes(hhmmA) {
 	const nowFull = new Date(Date.now());
 
 	const nowShort = new Date();
