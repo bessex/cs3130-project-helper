@@ -71,7 +71,7 @@ init_tracker().then(() => {
 	const test_poll_weather = schedule.scheduleJob('* 7-20 * * 1-5', () => tracker.poll());
 
 	test_poll_weather.on('success', () => {
-		if (isWithinFiveMinutes('2:19 PM')) {
+		if (isWithinFiveMinutes(14, 27)) {
 			post(tracker, 'Testing (it\'s working!)', client, channels);
 		}
 	});
@@ -80,7 +80,7 @@ init_tracker().then(() => {
 	const cs3130_poll_job = schedule.scheduleJob('40 13-15 * * 2,4', () => tracker.poll());
 
 	cs3130_poll_job.on('success', () => {
-		if (isWithinFiveMinutes('1:25 PM')) {
+		if (isWithinFiveMinutes(13, 25)) {
 			post(tracker, 'cs3130', client, channels);
 		}
 	});
@@ -91,7 +91,7 @@ init_tracker().then(() => {
 	const cs3500_poll_job = schedule.scheduleJob('0 10-14 * * 2,4', () => tracker.poll());
 
 	cs3500_poll_job.on('success', () => {
-		if (isWithinFiveMinutes('2:00 PM')) {
+		if (isWithinFiveMinutes(14, 00)) {
 			post(tracker, 'cs3500', client, channels);
 		}
 	});
@@ -102,7 +102,7 @@ init_tracker().then(() => {
 	const cs3200_poll_job = schedule.scheduleJob('25 11-13 * * 1,3', () => tracker.poll());
 
 	cs3200_poll_job.on('success', () => {
-		if (isWithinFiveMinutes('1:25 PM')) {
+		if (isWithinFiveMinutes(13, 25)) {
 			post(tracker, 'cs3200', client, channels);
 		}
 	});
@@ -113,7 +113,7 @@ init_tracker().then(() => {
 	const cs4400_poll_job = schedule.scheduleJob('50 9-11 * * 1,3', () => tracker.poll());
 
 	cs4400_poll_job.on('success', () => {
-		if (isWithinFiveMinutes('11:50 AM')) {
+		if (isWithinFiveMinutes(11, 50)) {
 			post(tracker, 'cs4400', client, channels);
 		}
 	});
@@ -122,14 +122,16 @@ init_tracker().then(() => {
 })
 
 
-function isWithinFiveMinutes(hhmmA) {
+function isWithinFiveMinutes(HH, MM) {
 	const nowFull = new Date(Date.now());
 
 	const nowShort = new Date();
 	nowShort.setHours(nowFull.getHours());
 	nowShort.setMinutes(nowFull.getMinutes());
 
-	const refTime = date.parse(hhmmA, 'hh:mm A');
+	const refTime = new Date();
+	refTime.setHours(HH);
+	refTime.setMinutes(MM);
 
 	console.log(`nowShort: ${nowShort.getHours()}:${nowShort.getMinutes()}`);
 	console.log(`refTime: ${refTime.getHours()}:${refTime.getMinutes()}`);
