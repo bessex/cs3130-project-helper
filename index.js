@@ -65,22 +65,27 @@ async function init_tracker(){
 	await tracker.poll();
 }
 
+const DEBUG = false;
+
 // we want at least three datapoints before we begin reporting--otherwise probably will crash with current implementation
 init_tracker().then(() => {
 
-	const test_poll_weather = schedule.scheduleJob('* 7-20 * * 1-5', () => tracker.poll());
+	if (DEBUG) {
+		const test_poll_weather = schedule.scheduleJob('* 7-20 * * 1-5', () => tracker.poll());
 
-	test_poll_weather.on('success', () => {
-		if (isWithinFiveMinutes(14, 31)) {
-			post(tracker, 'Testing (it\'s working!)', client, channels);
-		}
-	});
+		test_poll_weather.on('success', () => {
+			if (isWithinFiveMinutes(17, 16)) {
+				post(tracker, 'Testing (it\'s working!)', client, channels);
+			}
+		});
+
+	}
 
 	// cs3130
 	const cs3130_poll_job = schedule.scheduleJob('40 13-15 * * 2,4', () => tracker.poll());
 
 	cs3130_poll_job.on('success', () => {
-		if (isWithinFiveMinutes(13, 25)) {
+		if (isWithinFiveMinutes(15, 40)) {
 			post(tracker, 'cs3130', client, channels);
 		}
 	});
@@ -157,7 +162,7 @@ function isWithinFiveMinutes(HH, MM) {
 async function post(weather, courseName, client, channels) {
 	const scraper = require('./scrapers.js');
  	const covid = await scraper.getCovidData();
-	const wList = await weather.get(Date.now() * 1000);
+	const wList = await weather.get(Date.now());
 
     daydate = date.format(new Date(covid.dt), 'DD MMM YYYY, HH:mm');
 

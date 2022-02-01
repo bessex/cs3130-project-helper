@@ -1,4 +1,5 @@
-scraper = require('./scrapers.js');
+const scraper = require('./scrapers.js');
+const moment = require('moment');
 
 class Weather {
 
@@ -21,7 +22,7 @@ class Weather {
      * Returns weather closest to dt, dt - 1 hour, and dt - 2 hours.
      * Weather must have been polled at least three times already.
      * Prunes cached data older than 24h before the requested dt.
-     * @param {Number} dt - Unix time in seconds
+     * @param {Number} dt - Unix time in milliseconds
      */
     get(dt) {
         if (this.data.length < 3) return (null, null, null);
@@ -30,27 +31,44 @@ class Weather {
         var w1 = this.data[0];
         var w2 = this.data[0];
 
-        var dt0 = dt;
-        var dt1 = dt - (1 * 60 * 60);
-        var dt2 = dt - (2 * 60 * 60);
+        // times shortened for testing!!!
 
-        const prunedt = dt - (24 * 60 * 60);
+        var dt0 = moment(dt);
+        var dt1 = moment(dt).subtract(1, 'minute');
+        var dt2 = moment(dt).subtract(2, 'minutes');
+
+        const prunedt = moment(dt).subtract(1, 'day');
         var pruneIdx = 0;
 
-        var bestDelta0 = Math.abs(dt0 - w0.dt);
-        var bestDelta1 = Math.abs(dt1 - w1.dt);
-        var bestDelta2 = Math.abs(dt2 - w2.dt);
+        var bestDelta0 = Math.abs(dt0.diff(moment(w0.dt)));
+        var bestDelta1 = Math.abs(dt1.diff(moment(w1.dt)));
+        var bestDelta2 = Math.abs(dt2.diff(moment(w2.dt)));
 
         this.data.forEach((w, i) => {
-            const currentDelta0 = Math.abs(dt0 - w.dt);
-            const currentDelta1 = Math.abs(dt1 - w.dt);
-            const currentDelta2 = Math.abs(dt2 - w.dt);
+            const currentMoment = moment(w.dt);
 
-            if (currentDelta0 < bestDelta0) w0 = w;
-            if (currentDelta1 < bestDelta1) w1 = w;
-            if (currentDelta2 < bestDelta2) w2 = w;
+            const currentDelta0 = Math.abs(dt0.diff(currentMoment));
+            const currentDelta1 = Math.abs(dt1.diff(currentMoment));
+            const currentDelta2 = Math.abs(dt2.diff(currentMoment));
 
-            if (w.dt < prunedt && i > pruneIdx) pruneIdx = i;
+            if (currentDelta0 < bestDelta0) {
+                w0 = w;
+                bestDelta0 = currentDelta0;
+            }
+
+            if (currentDelta1 < bestDelta1) {
+                w1 = w;
+                bestDelta1 = currentDelta1;
+            } 
+
+            if (currentDelta2 < bestDelta2) {
+                w2 = w;
+                bestDelta2 = currentDelta2;
+            }
+
+            if (currentMoment.isBefore(prunedt) && i > pruneIdx) {
+                pruneIdx = i;
+            }
         });
 
         this.prune(pruneIdx);
