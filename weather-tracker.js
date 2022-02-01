@@ -31,11 +31,9 @@ class Weather {
         var w1 = this.data[0];
         var w2 = this.data[0];
 
-        // times shortened for testing!!!
-
         var dt0 = moment(dt);
-        var dt1 = moment(dt).subtract(1, 'minute');
-        var dt2 = moment(dt).subtract(2, 'minutes');
+        var dt1 = moment(dt).subtract(1, 'hour');
+        var dt2 = moment(dt).subtract(2, 'hours');
 
         const prunedt = moment(dt).subtract(1, 'day');
         var pruneIdx = 0;
