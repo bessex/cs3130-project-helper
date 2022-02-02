@@ -81,6 +81,15 @@ init_tracker().then(() => {
 
 	}
 
+	// cs5140
+	const cs5140_poll_job = schedule.scheduleJob('10 13-15 * * 1,3,5', () => tracker.poll());
+
+	cs5140_poll_job.on('success', () => {
+		if (isWithinFiveMinutes(15, 10)) {
+			post(tracker, 'cs5140', client, channels);
+		}
+	});
+
 	// cs3130
 	const cs3130_poll_job = schedule.scheduleJob('40 13-15 * * 2,4', () => tracker.poll());
 
@@ -89,8 +98,6 @@ init_tracker().then(() => {
 			post(tracker, 'cs3130', client, channels);
 		}
 	});
-
-	// const cs3130_post_job = schedule.scheduleJob('40 15 * * 2,4', () => post(tracker, 'cs3130', client, channels));
 
 	// cs3500
 	const cs3500_poll_job = schedule.scheduleJob('0 10-14 * * 2,4', () => tracker.poll());
@@ -101,8 +108,6 @@ init_tracker().then(() => {
 		}
 	});
 
-	// const cs3500_post_job = schedule.scheduleJob('0 14 * * 2,4', () => post(tracker, 'cs3500', client, channels));
-
 	// cs3200
 	const cs3200_poll_job = schedule.scheduleJob('25 11-13 * * 1,3', () => tracker.poll());
 
@@ -112,8 +117,6 @@ init_tracker().then(() => {
 		}
 	});
 
-	// const cs3200_post_job = schedule.scheduleJob('25 13 * * 1,3', () => post(tracker, 'cs3200', client, channels));
-
 	// cs4400
 	const cs4400_poll_job = schedule.scheduleJob('50 9-11 * * 1,3', () => tracker.poll());
 
@@ -122,8 +125,6 @@ init_tracker().then(() => {
 			post(tracker, 'cs4400', client, channels);
 		}
 	});
-
-	// const cs4400_post_job = schedule.scheduleJob('50 11 * * 1,3', () => post(tracker, 'cs4400', client, channels));
 })
 
 
