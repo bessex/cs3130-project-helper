@@ -161,16 +161,16 @@ function isWithinFiveMinutes(HH, MM) {
  * @param {Set} channels 
  */
 async function post(weather, courseName, client, channels) {
-	const scraper = require('./scrapers.js');
- 	const covid = await scraper.getCovidData();
+	// const scraper = require('./scrapers.js');
+ 	// const covid = await scraper.getCovidData();
 	const wList = await weather.get(Date.now());
 
     daydate = date.format(new Date(covid.dt), 'DD MMM YYYY, HH:mm');
 
-    const covidText = 
-        `**Univ of Utah COVID Cases on ${daydate}** \
-        \nTotal New Cases:             ${covid.newCases} \
-        \n7-day Avg New Cases:   ${covid.weeklyAvg}`;
+    // const covidText = 
+    //     `**Univ of Utah COVID Cases on ${daydate}** \
+    //     \nTotal New Cases:             ${covid.newCases} \
+    //     \n7-day Avg New Cases:   ${covid.weeklyAvg}`;
 
 	const tm0 = wList[0].dt;
 	const tm0_string = date.format(tm0, 'HH:mm');
@@ -193,8 +193,8 @@ async function post(weather, courseName, client, channels) {
         \nWeather: ${w}`;
 
 	const postText = `**Data for ${courseName}:** \
-		\n\
-		\n${covidText}\
+		// \n\
+		// \n${covidText}\
 		\n\
 		\n${weatherText}`;
 	
