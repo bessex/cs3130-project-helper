@@ -1,13 +1,8 @@
-/**
- * Some boilerplate code from discord.js.org
- */
-require('dotenv').config();
 const token = process.env.DISCORD_API_KEY;
 
 const { Client, Collection, Intents } = require('discord.js');
 const fs = require('fs');
 const schedule = require('node-schedule');
-const weather = require('./commands/weather.js');
 const date = require('date-and-time');
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
@@ -56,7 +51,6 @@ const opwToken = process.env.OPENWEATHER_TOKEN;
 const opwCity = process.env.OPENWEATHER_CITY_ID;
 
 const { Weather } = require('./weather-tracker.js');
-const { Console } = require('console');
 const tracker = new Weather(opwToken, opwCity);
 
 async function init_tracker(){

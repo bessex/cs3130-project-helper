@@ -1,9 +1,5 @@
 const scraper = require('../scrapers.js');
-// configure env variables to use later
-require('dotenv').config();
 const { SlashCommandBuilder } = require('@discordjs/builders');
-
-const axios = require('axios');
 const date = require('date-and-time');
 
 // make command available for discord.js
