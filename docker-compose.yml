@@ -4,6 +4,8 @@ services:
   cs3130-helper:
     build: .
     container_name: cs3130-helper
-    image: cs3130:latest
+    image: cs3130-helper:latest
+    restart: unless-stopped
     volumes:
-      - .env:/usr/src/app/.env
+      - ./.env:/usr/src/app/.env
+      - ./data:/usr/src/data

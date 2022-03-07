@@ -1,7 +1,5 @@
-# from https://nodejs.org/en/docs/guides/nodejs-docker-webapp/
 FROM node:16
 
-# create app directory
 WORKDIR /usr/src/app
 
 # install app dependencies
@@ -9,10 +7,10 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm install
 
-# bundle app source
+# copy app source
 COPY ./src .
 
-# copy dotenv file
+# copy dotenv example file
 COPY .env.example ./
 
 # start server with 'node -r dotenv-safe/config ./index.js'

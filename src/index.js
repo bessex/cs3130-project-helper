@@ -1,10 +1,11 @@
-const token = process.env.DISCORD_API_KEY;
-
-const { Client, Collection, Intents } = require('discord.js');
 const fs = require('fs');
+const dataDir = process.env.DATA_DIRECTORY;
+const channelsFile = `${dataDir}/channels.txt`;
+
 const schedule = require('node-schedule');
 const date = require('date-and-time');
 
+const { Client, Collection, Intents } = require('discord.js');
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 
 client.commands = new Collection();
@@ -17,10 +18,46 @@ for (const file of commandFiles) {
 	client.commands.set(command.data.name, command);
 }
 
+const token = process.env.DISCORD_API_KEY;
 client.once('ready', () => console.log(`Logged in as ${client.user.tag}`));
 client.login(token);
 
-const channels = new Set();
+/**
+ * Saves given channels to file
+ * @param {Set} channels set of channels to save
+ */
+function saveChannelsToFile(channels) {
+	const stream = fs.createWriteStream(channelsFile);
+	channels.forEach((cId) => {
+		console.log(`Writing ${cId}`);
+		stream.write(cId  + '\n');
+	});
+}
+
+/**
+ * Loads set of channels from file
+ * @returns {Set} the set of channels
+ */
+function loadChannelsFromFile() {
+	const channels = new Set();
+	
+	if (!fs.existsSync(channelsFile)) {
+		return channels;
+	}
+	
+	const stream = fs.createReadStream(channelsFile);
+	const readline = require('readline');
+	const rl = readline.createInterface(stream);
+
+	rl.on('line', (cId) => {
+		console.log(`Read ${cId}`)
+		channels.add(cId);
+	});
+	
+	return channels;
+}
+
+const channels = loadChannelsFromFile();
 
 client.on('interactionCreate', async interaction => {
 	if (!interaction.isCommand()) return;
@@ -33,10 +70,12 @@ client.on('interactionCreate', async interaction => {
 
 	if (command.data.name == 'subscribe') {
 		channels.add(cId);
+		saveChannelsToFile(channels);
 	}
 
 	if (command.data.name == 'unsubscribe') {
 		channels.delete(cId);
+		saveChannelsToFile(channels);
 	}
 
 	try {
@@ -51,9 +90,10 @@ const opwToken = process.env.OPENWEATHER_TOKEN;
 const opwCity = process.env.OPENWEATHER_CITY_ID;
 
 const { Weather } = require('./weather-tracker.js');
+const { Console } = require('console');
 const tracker = new Weather(opwToken, opwCity);
 
-async function init_tracker(){
+async function init_tracker() {
 	await tracker.poll();
 	await tracker.poll();
 	await tracker.poll();
@@ -156,15 +196,15 @@ function isWithinFiveMinutes(HH, MM) {
  */
 async function post(weather, courseName, client, channels) {
 	// const scraper = require('./scrapers.js');
- 	// const covid = await scraper.getCovidData();
+	// const covid = await scraper.getCovidData();
 	const wList = await weather.get(Date.now());
 
-    daydate = date.format(new Date(covid.dt), 'DD MMM YYYY, HH:mm');
+	daydate = date.format(new Date(covid.dt), 'DD MMM YYYY, HH:mm');
 
-    // const covidText = 
-    //     `**Univ of Utah COVID Cases on ${daydate}** \
-    //     \nTotal New Cases:             ${covid.newCases} \
-    //     \n7-day Avg New Cases:   ${covid.weeklyAvg}`;
+	// const covidText = 
+	//     `**Univ of Utah COVID Cases on ${daydate}** \
+	//     \nTotal New Cases:             ${covid.newCases} \
+	//     \n7-day Avg New Cases:   ${covid.weeklyAvg}`;
 
 	const tm0 = wList[0].dt;
 	const tm0_string = date.format(tm0, 'HH:mm');
@@ -191,7 +231,7 @@ async function post(weather, courseName, client, channels) {
 		// \n${covidText}\
 		\n\
 		\n${weatherText}`;
-	
+
 	channels.forEach((cId) => {
 		client.channels.fetch(cId)
 			.then(channel => channel.send(postText));
