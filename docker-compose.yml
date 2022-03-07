@@ -1,0 +1,9 @@
+version: '3.9'
+
+services:
+  cs3130-helper:
+    build: .
+    container_name: cs3130-helper
+    image: cs3130:latest
+    volumes:
+      - .env:/usr/src/app/.env
