@@ -227,8 +227,6 @@ async function post(weather, courseName, client, channels) {
         \nWeather: ${w}`;
 
 	const postText = `**Data for ${courseName}:** \
-		// \n\
-		// \n${covidText}\
 		\n\
 		\n${weatherText}`;
 

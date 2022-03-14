@@ -2,6 +2,10 @@ FROM node:16
 
 WORKDIR /usr/src/app
 
+# fix the time zone
+RUN apt update && apt install tzdata -y
+ENV TZ="America/Denver"
+
 # install app dependencies
 # use wildcard to copy both package.json & package-lock.json
 COPY package*.json ./
