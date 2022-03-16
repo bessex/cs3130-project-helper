@@ -22,7 +22,8 @@ class Weather {
      * Returns weather closest to dt, dt - 1 hour, and dt - 2 hours.
      * Weather must have been polled at least three times already.
      * Prunes cached data older than 24h before the requested dt.
-     * @param {Number} dt - Unix time in milliseconds
+     * @param {Number} dt 
+     * @returns { } last 3 weather datapoints
      */
     get(dt) {
         if (this.data.length < 3) return (null, null, null);

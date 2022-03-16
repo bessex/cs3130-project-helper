@@ -199,7 +199,7 @@ async function post(weather, courseName, client, channels) {
 	// const covid = await scraper.getCovidData();
 	const wList = await weather.get(Date.now());
 
-	daydate = date.format(Date.now(), 'DD MMM YYYY, HH:mm');
+	daydate = date.format(new Date(Date.now()), 'DD MMM YYYY, HH:mm');
 
 	// const covidText = 
 	//     `**Univ of Utah COVID Cases on ${daydate}** \
