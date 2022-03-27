@@ -1,7 +1,6 @@
 /**
  * Some boilerplate code from discord.js.org
  */
-require('dotenv').config();
 const token = process.env.DISCORD_API_KEY;
 const clientId = process.env.APPLICATION_ID;
 
