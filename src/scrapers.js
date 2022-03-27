@@ -5,6 +5,7 @@ const { JSDOM } = jsdom;
 
 exports.getCovidData = getCovidData;
 exports.getWeatherData = getWeatherData;
+exports.getWeatherDataHistorical = getWeatherDataHistorical;
 
 /**
  * 
@@ -54,6 +55,37 @@ exports.getWeatherData = getWeatherData;
     // get city and current nominal weather
     const city = nowJson.name;
     const weathers = Array.from(nowJson.weather, w => w.description).join(', ');
+
+    return { dt: tm0,
+            city: city,
+            temp: tm0_temp,
+            weather: weathers
+        };
+}
+
+/**
+ * 
+ * @param {String} token 
+ * @param {String} cityId 
+ * @param {Date} datetime 
+ * @returns 
+ */
+async function getWeatherDataHistorical(token, cityId, datetime) {
+    // convert to unix time in seconds
+    const time = Math.floor(datetime.getTime() / 1000);
+
+    // request historical JSON from API
+    const histJson = await axios.get(`http://history.openweathermap.org/data/2.5/history/city?id=${cityId}&start=${time}&cnt=1&APPID=${token}&type=hour`)
+                            .then((response) => response.data)
+                            .catch(console.error);
+    
+    // get historical time and temp info
+    const tm0 = new Date(histJson.dt * 1000);
+    const tm0_temp = (((histJson.main.temp - 273) * 9/5) + 32).toFixed(2);
+
+    // get city and nominal weather
+    const city = histJson.name;
+    const weathers = Array.from(histJson.weather, w => w.description).join(', ');
 
     return { dt: tm0,
             city: city,

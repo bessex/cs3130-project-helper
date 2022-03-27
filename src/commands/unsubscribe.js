@@ -6,6 +6,6 @@ module.exports = {
         .setName('unsubscribe')
         .setDescription('Unsubscribes the current channel to cs3130 project helper'),
     async execute(interaction) {
-        await interaction.reply('Unsubscribed!');
+        await interaction.reply({ content: 'Unsubscribed.', ephemeral: true });
     },
 };

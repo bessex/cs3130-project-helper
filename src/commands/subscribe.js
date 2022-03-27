@@ -6,6 +6,6 @@ module.exports = {
         .setName('subscribe')
         .setDescription('Subscribes the current channel to cs3130 project helper'),
     async execute(interaction) {
-        await interaction.reply('Subscribed!');
+        await interaction.reply({ content: 'Subscribed!', ephemeral: true });
     },
 };
