@@ -10,20 +10,16 @@ dayjs.extend(isSameOrAfter);
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('weather')
-        .setDescription('Gets current and recent weather information from OpenWeather API.')
-        .addSubcommand(subcommand =>
-            subcommand
-                .setName('historical')
-                .setDescription('Get historical data')
-                .addStringOption(option =>
-                    option
-                        .setName('datetime')
-                        .setDescription('The date and time to query weather for')
-                        .setRequired(true))),
+        .setDescription('Gets current and historical weather information from OpenWeather API.')
+        .addStringOption(option => 
+            option
+            .setName('datetime')
+            .setDescription('The date and time to query weather for (empty for current info)')
+            .setRequired(false)),
     async execute(interaction) {
         var reply;
 
-        if (interaction.options.getSubcommand() === 'historical') {
+        if (interaction.options.getString('datetime')) {
             const datetimeText = interaction.options.getString('datetime');
             const datetime = chrono.parseDate(datetimeText);
             reply = await getWeatherTextHistorical(datetime);
@@ -77,7 +73,7 @@ async function getWeatherTextHistorical(datetime) {
     // we only have hourly data:
     // round to the nearest hour
     const msPerHr = 60 * 60 * 1000;
-    var datetimeRounded = dayjs(Math.round(date.getTime() / msPerHr) * msPerHr);
+    var datetimeRounded = dayjs(Math.round(datetime.getTime() / msPerHr) * msPerHr);
 
     // if nearest hour in the future, use last hour
     if (datetimeRounded.isSameOrAfter(dayjs(), 'millisecond'))
