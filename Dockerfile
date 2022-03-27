@@ -18,5 +18,5 @@ COPY ./src .
 COPY .env.example ./
 
 # start server with 'node -r dotenv-safe/config ./index.js'
-# this allows us to use .env without it being in docker
+# this allows us to use .env without it being in docker image
 CMD [ "node", "-r", "dotenv-safe/config", "./index.js" ]
